@@ -5,7 +5,46 @@ import glob
 import pathlib
 from pathlib import Path
 
-from threading import Timer
+# watchdog
+import sys
+import time
+import logging
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+def on_created(event):
+    print("created")
+
+def on_moved(event):
+    print("moved")
+
+
+
+
+#from threading import Timer
+if __name__ == "__main__":
+    
+    event_handler = FileSystemEventHandler()
+
+    #calling functions
+    event_handler.on_created = on_created
+    event_handler.on_moved = on_moved
+
+    path="C:/Users/inove/OneDrive/Bureau/DEV Briac/scriptOutlook/dossierRempli"
+    observer = Observer()
+    observer.schedule(event_handler, path, recursive=True)
+
+    observer.start()
+    try:
+        print("Surveillance")
+        while True:
+            time.sleep(1)
+    finally:
+        observer.stop()
+        print('done')
+    observer.join()
+
+
 
 
 files = []
