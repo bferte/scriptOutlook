@@ -5,6 +5,12 @@ import glob
 import pathlib
 from pathlib import Path
 
+import win32com.client as win32
+
+import pythoncom
+
+
+
 # watchdog
 import sys
 import time
@@ -14,6 +20,39 @@ from watchdog.events import FileSystemEventHandler
 
 def on_created(event):
     print("created")
+    files = []
+    filesAbsolute = []
+
+    for file in glob.glob("dossierRempli/*"):
+        files.append(file)
+
+
+    for file in files:
+        filesAbsolute.append(Path(file).resolve())
+
+    for file in filesAbsolute:
+        file = str(file) 
+        print(file)   
+        
+
+    # Genere l'email via compte outlook local
+    pythoncom.CoInitialize()
+
+
+    outlook = win32.Dispatch('Outlook.Application')
+    mail = outlook.CreateItem(0)
+    mail.Display()
+    #mail.To = 'To address'
+    #mail.Subject = 'Message subject'
+    #mail.Body = 'Message body'
+    #mail.HTMLBody = '<h2>HTML Message body</h2>' #this field is optional
+
+    # To attach a file to the email (optional):
+    #attachment  = "Path to the attachment"
+    #mail.Attachments.Add("dossierRempli\pli.txt")
+    for file in filesAbsolute:
+        mail.Attachments.Add(str(file))
+        
 
 def on_moved(event):
     print("moved")
@@ -69,7 +108,6 @@ for file in filesAbsolute:
 
 # Genere l'email via compte outlook local
 
-import win32com.client as win32
 
 outlook = win32.Dispatch('Outlook.Application')
 mail = outlook.CreateItem(0)
