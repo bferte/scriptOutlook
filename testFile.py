@@ -39,6 +39,8 @@ def on_created(event):
     pythoncom.CoInitialize()
 
 
+
+
     outlook = win32.Dispatch('Outlook.Application')
     mail = outlook.CreateItem(0)
     mail.Display()
@@ -83,43 +85,3 @@ if __name__ == "__main__":
         print('done')
     observer.join()
 
-
-
-
-files = []
-filesAbsolute = []
-
-for file in glob.glob("dossierRempli/*"):
-    files.append(file)
-
-
-for file in files:
-    filesAbsolute.append(Path(file).resolve())
-
-for file in filesAbsolute:
-    file = str(file) 
-    print(file)   
-    
-
-
-
-
-
-
-# Genere l'email via compte outlook local
-
-
-outlook = win32.Dispatch('Outlook.Application')
-mail = outlook.CreateItem(0)
-mail.Display()
-#mail.To = 'To address'
-#mail.Subject = 'Message subject'
-#mail.Body = 'Message body'
-#mail.HTMLBody = '<h2>HTML Message body</h2>' #this field is optional
-
-# To attach a file to the email (optional):
-#attachment  = "Path to the attachment"
-#mail.Attachments.Add("dossierRempli\pli.txt")
-for file in filesAbsolute:
-    mail.Attachments.Add(str(file))
-#mail.Send()
