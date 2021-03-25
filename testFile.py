@@ -35,10 +35,10 @@ def on_created(event):
         print(file)   
         
 
-    # Genere l'email via compte outlook local
     pythoncom.CoInitialize()
 
 
+    # Genere l'email via compte outlook local
 
 
     outlook = win32.Dispatch('Outlook.Application')
@@ -52,8 +52,22 @@ def on_created(event):
     # To attach a file to the email (optional):
     #attachment  = "Path to the attachment"
     #mail.Attachments.Add("dossierRempli\pli.txt")
+
+    
     for file in filesAbsolute:
         mail.Attachments.Add(str(file))
+
+    while not mail.sent :
+            print('pas envoyé')
+            time.sleep(2)
+    
+    else : 
+        for file in glob.glob("dossierRempli/*"):
+            os.remove(file)
+
+
+
+
         
 
 def on_moved(event):
