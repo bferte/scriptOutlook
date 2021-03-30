@@ -37,13 +37,14 @@ def on_created(event):
 
     pythoncom.CoInitialize()
 
-
     # Genere l'email via compte outlook local
 
 
     outlook = win32.Dispatch('Outlook.Application')
     mail = outlook.CreateItem(0)
     mail.Display()
+
+    
     #mail.To = 'To address'
     #mail.Subject = 'Message subject'
     #mail.Body = 'Message body'
@@ -57,13 +58,25 @@ def on_created(event):
     for file in filesAbsolute:
         mail.Attachments.Add(str(file))
 
-    while not mail.sent :
-            print('pas envoyé')
-            time.sleep(2)
+    #while not mail.sent :
+     #       print('pas envoyé')
+       #     print(mail.sent)
+       #     time.sleep(2)
+    try:
+            while not mail.sent :
+                print('pas envoyé')
+                time.sleep(2)
+    except NameError:
+        print('envoyé')
+    else:
+        print("envoyé2")
+
+   
     
-    else : 
-        for file in glob.glob("dossierRempli/*"):
-            os.remove(file)
+            
+    
+       #for file in glob.glob("dossierRempli/*"):
+            #os.remove(file)
 
 
 
@@ -85,7 +98,7 @@ if __name__ == "__main__":
     event_handler.on_created = on_created
     event_handler.on_moved = on_moved
 
-    path="C:/Users/inove/OneDrive/Bureau/DEV Briac/scriptOutlook/dossierRempli"
+    path="C:/Users/briac/OneDrive/Bureau/DEV/scriptOutlook/dossierRempli"
     observer = Observer()
     observer.schedule(event_handler, path, recursive=True)
 
